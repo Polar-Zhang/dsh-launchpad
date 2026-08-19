@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="color-scheme" content="light dark">
+<title>正在启动 DSH</title>
+<style>
+  :root {
+    --bg-1: #0b0f1a; --bg-2: #0f1526;
+    --ink: #e9edf6; --dim: #7f889e;
+    --line: rgba(255,255,255,.07);
+    --logo: #4d6bfe;            /* DeepSeek official blue */
+    --accent: #4d6bfe; --accent-3: #2fd4b8;
+    --glow: rgba(77,107,254,.28);
+    --seg-bg: rgba(255,255,255,.06);
+    --err: #ff7b7b;
+  }
+  @media (prefers-color-scheme: light) {
+    :root {
+      --bg-1: #f6f8fd; --bg-2: #edf1fa;
+      --ink: #1b2540; --dim: #67708c;
+      --line: rgba(20,45,100,.12);
+      --logo: #111827;          /* official black variant on light */
+      --accent: #2f6bff; --accent-3: #0fb98a;
+      --glow: rgba(47,107,255,.16);
+      --seg-bg: rgba(20,45,100,.07);
+      --err: #d64545;
+    }
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    min-height: 100vh; display: flex; align-items: center; justify-content: center;
+    background: radial-gradient(900px 520px at 50% -20%, var(--glow), transparent 60%),
+                linear-gradient(165deg, var(--bg-1), var(--bg-2));
+    color: var(--ink);
+    font-family: system-ui, -apple-system, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+  }
+  .wrap { width: min(400px, 84vw); text-align: center; }
+
+  .logo {
+    width: 150px; height: 100px; margin: 0 auto 24px;
+    display: flex; align-items: center; justify-content: center;
+    animation: swim 3.4s ease-in-out infinite;
+  }
+  .logo svg { width: 100%; height: 100%; }
+  @keyframes swim {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-5px); }
+  }
+
+  h1 { font-size: 19px; font-weight: 700; letter-spacing: .3px; }
+  .sub { margin-top: 6px; font-size: 12.5px; color: var(--dim); }
+
+  .bar { display: flex; gap: 6px; margin: 30px 0 12px; }
+  .seg {
+    height: 5px; flex: 1; border-radius: 99px;
+    background: color-mix(in srgb, var(--ink) 14%, transparent);
+    overflow: hidden; position: relative;
+    transition: background .35s ease;
+  }
+  .seg.done   { background: var(--ink); }
+  .seg.active { background: var(--ink); }
+  .seg.active::after {
+    content: ""; position: absolute; inset: 0;
+    background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--ink) 45%, transparent), transparent);
+    animation: sweep 1.2s ease-in-out infinite;
+  }
+  @keyframes sweep { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
+
+  .steps { display: flex; gap: 6px; font-size: 11.5px; color: var(--dim); }
+  .steps span { flex: 1; text-align: center; transition: color .3s, font-weight .3s; }
+  .steps span.on { color: var(--ink); font-weight: 600; }
+
+  .time { margin-top: 18px; font-size: 12px; color: var(--dim); font-variant-numeric: tabular-nums; }
+  .time b { color: var(--ink); }
+  .err { display: none; margin-top: 16px; font-size: 12px; color: var(--err); line-height: 1.7; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="logo">
+    <svg viewBox="-2 -2 60.2 45.36" aria-hidden="true">
+      <path fill="var(--logo)" d="M55.6128,3.4712c-.5953-.2917-.8517.2642-1.1998.5466-.1191.0911-.2198.2095-.3206.3188-.8701.9292-1.8867,1.5398-3.2148,1.4668-1.9417-.1094-3.5995.5012-5.065,1.9863-.3114-1.8313-1.3463-2.9248-2.9217-3.6262-.8242-.3645-1.6577-.729-2.2348-1.5217-.403-.5647-.5129-1.1934-.7144-1.813-.1283-.3735-.2565-.7563-.687-.8201-.4671-.0728-.6503.3188-.8335.647-.7327,1.3394-1.0166,2.8154-.9892,4.3096.0641,3.3621,1.4838,6.0406,4.3047,7.9449.3206.2187.403.4372.3023.7563-.1924.656-.4214,1.2937-.6228,1.9497-.1283.4192-.3207.5103-.7694.3279-1.5479-.6467-2.8852-1.6035-4.0667-2.7605-2.0058-1.9407-3.8193-4.0818-6.0815-5.7583-.5312-.3918-1.0625-.7561-1.6121-1.1025-2.3081-2.2412.3023-4.0818.9068-4.3003.6319-.2278.2198-1.0115-1.8227-1.0022-2.0425.009-3.9109.6924-6.2922,1.6035-.348.1367-.7145.2368-1.09.3188-2.1615-.4099-4.4055-.5012-6.7502-.2368-4.4147.4919-7.9408,2.5784-10.5328,6.1409C.1914,13.1289-.5413,17.9941.3563,23.0691c.9434,5.3481,3.6727,9.7761,7.8676,13.2385,4.3506,3.5896,9.3606,5.3481,15.0758,5.011,3.4713-.2004,7.3364-.665,11.6961-4.355,1.099.5467,2.2531.7652,4.1674.9292,1.4746.1367,2.8943-.0728,3.9933-.3005,1.7219-.3645,1.6029-1.959.9801-2.2505-5.0466-2.3506-3.9385-1.394-4.9459-2.1685,2.5645-3.0339,6.4297-6.1865,7.9409-16.4001.119-.8108.0183-1.3211,0-1.9771-.0092-.4008.0824-.5556.5404-.6013,1.2639-.1458,2.4912-.4919,3.6178-1.1115,3.2698-1.7857,4.5886-4.7195,4.9-8.2364.0459-.5376-.0091-1.0935-.577-1.3757ZM27.119,35.123c-4.8909-3.8447-7.263-5.1113-8.2431-5.0566-.9159.0547-.751,1.1025-.5496,1.7859.2107.6741.4855,1.1389.8701,1.731.2656.3918.4489.9748-.2655,1.4123-1.5754.9749-4.314-.3281-4.4423-.3918-3.1872-1.877-5.8525-4.3553-7.7302-7.7444-1.8135-3.262-2.8667-6.7605-3.0408-10.4961-.0458-.9019.2198-1.221,1.1174-1.3848,1.1815-.2187,2.3997-.2644,3.5812-.0913,4.9918.729,9.2415,2.9612,12.8043,6.4963,2.0333,2.0135,3.572,4.419,5.1566,6.7696,1.6852,2.4963,3.4987,4.8745,5.8068,6.8242.8151.6833,1.4654,1.2026,2.0882,1.5854-1.8775.2095-5.01.2552-7.1532-1.4397ZM29.4637,20.0442c0-.4009.3206-.7197.7237-.7197.0916,0,.174.018.2473.0453.1008.0366.1924.0913.2656.1731.1283.1277.2015.3098.2015.5012,0,.4009-.3205.7197-.7234.7197s-.7145-.3188-.7145-.7197ZM36.7452,23.7798c-.4671.1914-.9342.3552-1.383.3735-.6961.0364-1.4563-.2461-1.8684-.5923-.6411-.5376-1.0991-.8381-1.2914-1.7766-.0825-.4009-.0367-1.0205.0367-1.3757.1648-.7654-.0184-1.2573-.5587-1.7039-.4397-.3645-.9984-.4646-1.6121-.4646-.229,0-.4395-.1003-.5953-.1823-.2565-.1275-.467-.4464-.2656-.8382.0641-.1274.3756-.4373.4489-.4919.8335-.4739,1.7952-.3189,2.6836.0364.8244.3371,1.4472.9567,2.3447,1.8313.9159,1.0568,1.0807,1.3486,1.6028,2.1411.4123.6196.7878,1.2573,1.0442,1.9863.1557.4556-.0458.8291-.5862,1.0569Z"/>
+    </svg>
+  </div>
+  <h1>DeepSeek Harness</h1>
+  <p class="sub">正在启动，请稍候</p>
+
+  <div class="bar">
+    <div class="seg" id="seg0"></div>
+    <div class="seg" id="seg1"></div>
+    <div class="seg" id="seg2"></div>
+    <div class="seg" id="seg3"></div>
+  </div>
+  <div class="steps">
+    <span id="st0">清理残留</span>
+    <span id="st1">启动服务</span>
+    <span id="st2">连接就绪</span>
+    <span id="st3">进入界面</span>
+  </div>
+  <div class="time">已等待 <b id="s">0</b> 秒</div>
+  <div class="err" id="err"></div>
+</div>
+
+<script>
+// The page works in two modes:
+//   - hosted:   served by the plugin at http://127.0.0.1:3080/launchpad
+//   - standalone: opened directly from disk (file://) before dsh is up
+const hosted   = location.protocol === 'http:' || location.protocol === 'https:';
+const statusUrl = hosted ? '/launchpad/status' : 'http://127.0.0.1:3080/launchpad/status';
+const homeUrl   = hosted ? '/' : 'http://127.0.0.1:3080/';
+const fetchOpts = hosted
+  ? { cache: 'no-store' }
+  : { mode: 'no-cors', cache: 'no-store' };
+
+const secEl = document.getElementById('s');
+const errEl = document.getElementById('err');
+const segs  = [0,1,2,3].map(i => document.getElementById('seg' + i));
+const steps = [0,1,2,3].map(i => document.getElementById('st' + i));
+let secs = 0;
+
+function setStage(n) {
+  segs.forEach((s, i) => {
+    s.className = 'seg' + (i < n ? ' done' : i === n ? ' active' : '');
+  });
+  steps.forEach((s, i) => { s.className = i === n ? 'on' : ''; });
+}
+
+setInterval(() => { secs++; secEl.textContent = secs; }, 1000);
+setStage(0);
+setTimeout(() => setStage(1), 1200);
+
+async function probe() {
+  if (location.search.indexOf('p') >= 0) return;   // ?p = preview, no redirect
+  try {
+    const ctl = new AbortController();
+    const t   = setTimeout(() => ctl.abort(), 3000);
+    await fetch(statusUrl, fetchOpts);
+    clearTimeout(t);
+    setStage(2);
+    setTimeout(() => { setStage(3); location.replace(homeUrl); }, 400);
+  } catch (e) {
+    if (secs > 180) {
+      errEl.style.display = 'block';
+      errEl.textContent = '启动超时（180 秒）。请检查 ~/.dsh/logs/web.log，或运行 stop-dsh.cmd 后重试。';
+      return;
+    }
+    setTimeout(probe, 600);
+  }
+}
+probe();
+</script>
+</body>
+</html>
