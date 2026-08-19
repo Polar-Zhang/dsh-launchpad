@@ -4,6 +4,40 @@
 
 A [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) plugin that adds an **elegant splash / loading page** and a **readiness endpoint** to the web UI, plus **Windows desktop launcher scripts** — double-click to start DSH, close the browser tab and DSH stops by itself.
 
+## 🤖 Copy-paste install prompt for AI assistants
+
+Paste the block below to your AI assistant (a DSH agent session, Claude, etc.). It is self-contained — the assistant can fetch this repo and install everything correctly.
+
+````text
+Install the dsh-launchpad plugin for DeepSeek Harness from
+https://github.com/Polar-Zhang/dsh-launchpad (Windows).
+
+1. Fetch the repo: `git clone https://github.com/Polar-Zhang/dsh-launchpad.git`
+   to a temp dir, OR install straight from GitHub with
+   `dsh plugin --profile web add github:Polar-Zhang/dsh-launchpad`.
+2. Verify the bundle list: read `<DSH_HOME>/profiles/web/package.json`
+   (DSH_HOME defaults to `%USERPROFILE%\.dsh`). The `dsh.profile.bundles`
+   array MUST contain `dsh-launchpad` (the package declares
+   `dsh.bundle.patch`). `dsh plugin add` does not always append to bundles —
+   if it is missing, add it manually as a string in that array, next to the
+   other bundle names. pnpm peer-dependency warnings are expected and
+   harmless (the dsh runtime provides those peers).
+3. Deploy the launcher scripts by running `scripts/install.cmd` from the
+   repo (or, after an npm/GitHub install:
+   `call "%USERPROFILE%\.dsh\profiles\web\node_modules\dsh-launchpad\scripts\install.cmd"`).
+   It copies `loading.html`, `start-dsh.cmd`, `watch-dsh-idle.cmd`,
+   `hide-run.vbs`, `stop-dsh.cmd` into `%USERPROFILE%\.dsh\`.
+4. Create a desktop shortcut (double-click = launch, no console windows):
+   `wscript.exe "%USERPROFILE%\.dsh\hide-run.vbs" "cmd /c %USERPROFILE%\.dsh\start-dsh.cmd"`
+   (optional: set the shortcut icon to any .ico the user picks).
+5. Restart the dsh web profile so the bundle loads — if dsh is currently
+   running, stop it first with `%USERPROFILE%\.dsh\stop-dsh.cmd`, then start
+   it again (e.g. via the new shortcut).
+6. Verify: `GET http://127.0.0.1:3080/launchpad/status` returns JSON with
+   `"ok":true`, and `GET http://127.0.0.1:3080/launchpad` serves the splash
+   page. Then open `http://127.0.0.1:3080/` to confirm the app works.
+````
+
 ## What you get
 
 | Piece | What it does |

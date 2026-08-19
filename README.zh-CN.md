@@ -4,6 +4,39 @@
 
 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) 插件：为 Web UI 增加**优雅的启动加载页**和**就绪状态接口**，并附赠 **Windows 桌面启动脚本**——双击启动 DSH，关闭浏览器标签 DSH 自动退出。
 
+## 🤖 复制给 AI 的一键安装指令
+
+把下面的代码块整段复制给你的 AI 助手（DSH agent 会话、Claude 等均可）。指令自包含——AI 可以先拉取本仓库再按步骤正确安装。
+
+````text
+请帮我安装 DeepSeek Harness 的 dsh-launchpad 插件（Windows），仓库地址：
+https://github.com/Polar-Zhang/dsh-launchpad
+
+1. 拉取仓库：`git clone https://github.com/Polar-Zhang/dsh-launchpad.git`
+   到临时目录；或直接用
+   `dsh plugin --profile web add github:Polar-Zhang/dsh-launchpad`
+   从 GitHub 安装。
+2. 检查 bundle 列表：读取 `<DSH_HOME>/profiles/web/package.json`
+   （DSH_HOME 默认是 `%USERPROFILE%\.dsh`）。`dsh.profile.bundles` 数组
+   必须包含 `dsh-launchpad`（该包声明了 `dsh.bundle.patch`）。注意：
+   `dsh plugin add` 不一定会自动把它加进 bundles——如果缺失，手动在
+   该数组里补上这个字符串（与其他 bundle 名并列）。pnpm 的 peer
+   依赖警告是预期现象、无害（运行时由 dsh 提供这些 peer）。
+3. 部署启动脚本：运行仓库里的 `scripts/install.cmd`（若是通过
+   npm/GitHub 装的，则运行
+   `call "%USERPROFILE%\.dsh\profiles\web\node_modules\dsh-launchpad\scripts\install.cmd"`）。
+   它会把 `loading.html`、`start-dsh.cmd`、`watch-dsh-idle.cmd`、
+   `hide-run.vbs`、`stop-dsh.cmd` 复制到 `%USERPROFILE%\.dsh\`。
+4. 创建桌面快捷方式（双击即启动、无控制台窗口）：
+   `wscript.exe "%USERPROFILE%\.dsh\hide-run.vbs" "cmd /c %USERPROFILE%\.dsh\start-dsh.cmd"`
+   （可选：在快捷方式属性里把图标换成用户喜欢的 .ico）。
+5. 重启 dsh web profile 让 bundle 生效——如果 dsh 正在运行，先用
+   `%USERPROFILE%\.dsh\stop-dsh.cmd` 停止，再重新启动（例如用新建的快捷方式）。
+6. 验证：`GET http://127.0.0.1:3080/launchpad/status` 应返回
+   `"ok":true` 的 JSON；`GET http://127.0.0.1:3080/launchpad` 应返回加载页。
+   最后打开 `http://127.0.0.1:3080/` 确认应用正常。
+````
+
 ## 包含什么
 
 | 组件 | 作用 |
