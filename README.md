@@ -92,6 +92,16 @@ start "" "%USERPROFILE%\.dsh\loading.html?p"
 
 `?p` = preview mode (no polling, no redirect). Toggle Windows light/dark mode to see the theme switch.
 
+## Screenshots
+
+The splash page, dark & light (follows the system theme automatically):
+
+| Dark | Light |
+|---|---|
+| ![splash dark](docs/loading-dark.png) | ![splash light](docs/loading-light.png) |
+
+The four bar segments map to the real startup stages: cleanup → boot → ready → enter. When the server is up, the page redirects into the DSH UI.
+
 ## Endpoints
 
 ```

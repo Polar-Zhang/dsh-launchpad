@@ -98,6 +98,16 @@ GET /launchpad           → 加载页 (text/html)
 GET /launchpad/status    → {"ok":true,"service":"dsh","pid":...,"uptime":...,"time":...}
 ```
 
+## 截图
+
+加载页效果（深色 / 浅色，自动跟随系统主题）：
+
+| 深色 | 浅色 |
+|---|---|
+| ![加载页深色](docs/loading-dark.png) | ![加载页浅色](docs/loading-light.png) |
+
+四段进度条对应真实启动阶段：清理 → 启动 → 就绪 → 进入；服务就绪后自动跳转进入 DSH 界面。
+
 ## 自定义
 
 加载页是单个自包含 HTML——改 `assets/loading.html`（logo、配色、阶段文案、超时）重新部署即可。全部内联，无 CDN 依赖，离线可用。
