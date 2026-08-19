@@ -1,5 +1,7 @@
 # dsh-launchpad
 
+**English** | [简体中文](README.zh-CN.md)
+
 A [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) plugin that adds an **elegant splash / loading page** and a **readiness endpoint** to the web UI, plus **Windows desktop launcher scripts** — double-click to start DSH, close the browser tab and DSH stops by itself.
 
 ## What you get

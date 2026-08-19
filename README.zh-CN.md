@@ -1,5 +1,7 @@
 # dsh-launchpad
 
+[English](README.md) | **简体中文**
+
 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) 插件：为 Web UI 增加**优雅的启动加载页**和**就绪状态接口**，并附赠 **Windows 桌面启动脚本**——双击启动 DSH，关闭浏览器标签 DSH 自动退出。
 
 ## 包含什么
