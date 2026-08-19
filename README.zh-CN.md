@@ -71,7 +71,11 @@ scripts\install.cmd
 wscript.exe "%USERPROFILE%\.dsh\hide-run.vbs" "cmd /c %USERPROFILE%\.dsh\start-dsh.cmd"
 ```
 
-（快捷方式属性里可把图标换成你喜欢的任意 .ico。）
+把快捷方式图标换成官方鲸鱼圆角图标（本仓库已附带）：
+
+![桌面图标](docs/desktop-icon.png)
+
+右键快捷方式 → **属性 → 更改图标** → 选择上图（或装有鲸鱼娘皮肤时的 `%USERPROFILE%\.dsh\icons\whale-girl.ico`）。
 
 ## 使用
 

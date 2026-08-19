@@ -72,7 +72,11 @@ Create a desktop shortcut for a true double-click experience:
 wscript.exe "%USERPROFILE%\.dsh\hide-run.vbs" "cmd /c %USERPROFILE%\.dsh\start-dsh.cmd"
 ```
 
-(Pick `%USERPROFILE%\.dsh\icons\whale-girl.ico` or any icon you like via the shortcut properties.)
+Set the shortcut icon to the official whale tile (included in this repo):
+
+![desktop icon](docs/desktop-icon.png)
+
+Right-click the shortcut → **Properties → Change icon** → pick the image above (or `%USERPROFILE%\.dsh\icons\whale-girl.ico` if you have the whale-girl pack).
 
 ## Usage
 
