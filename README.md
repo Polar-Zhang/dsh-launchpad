@@ -4,7 +4,60 @@
 
 A [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) plugin that adds an **elegant splash / loading page** and a **readiness endpoint** to the web UI, plus **Windows desktop launcher scripts** — double-click to start DSH, close the browser tab and DSH stops by itself.
 
-## 🤖 Copy-paste install prompt for AI assistants
+## ✨ A splash page that matches your theme
+
+The startup page follows your system theme automatically — **dark or light**, with the official DeepSeek whale:
+
+| 🌙 Dark | ☀️ Light |
+|---|---|
+| ![splash dark](docs/loading-dark.png) | ![splash light](docs/loading-light.png) |
+
+- **Official DeepSeek whale logo** — auto dark/light via `prefers-color-scheme`, gently floating while you wait
+- **4-stage progress bar** mapped to the real startup stages: cleanup → boot → ready → enter
+- **Instant browser open, zero windows** — double-click the shortcut, the splash page appears immediately and redirects into DSH the moment the server is ready
+- **Your icon, your choice** — the desktop shortcut can wear the official whale tile included in this repo, or any icon you like:
+
+![desktop icon](docs/desktop-icon.png)
+
+## What you get
+
+| Piece | What it does |
+|---|---|
+| `GET /launchpad` | The splash page: official DeepSeek whale logo (auto dark/light via `prefers-color-scheme`), 4-stage progress bar (cleanup → boot → ready → enter), waiting timer. |
+| `GET /launchpad/status` | JSON readiness probe the splash page polls; redirects into the app the moment the server is up. |
+| `scripts/start-dsh.cmd` | Silent Windows launcher: kills port-3080 zombies, starts `dsh web` hidden, opens the splash page in the browser. |
+| `scripts/watch-dsh-idle.cmd` | Hidden watcher: when the browser disconnects from port 3080 for ~10 s, it kills dsh. Close the tab → dsh stops. |
+| `scripts/hide-run.vbs` | 3-line helper that runs a command with zero visible windows (Windows has no pure-cmd way to fully hide a background process). |
+| `scripts/stop-dsh.cmd` | Emergency stop: kills whatever is listening on port 3080. |
+
+## Install
+
+### Quick — plugin
+
+```bash
+dsh plugin --profile web add dsh-launchpad
+```
+
+### With launcher scripts & desktop shortcut
+
+Deploy the launcher scripts and splash page to `~/.dsh`:
+
+```cmd
+:: from the package directory
+scripts\install.cmd
+```
+
+Or copy `assets/loading.html` + `scripts/*` manually to `%USERPROFILE%\.dsh\`.
+
+Create a desktop shortcut for a true double-click experience:
+
+```cmd
+wscript.exe "%USERPROFILE%\.dsh\hide-run.vbs" "cmd /c %USERPROFILE%\.dsh\start-dsh.cmd"
+```
+
+Set the shortcut icon to the official whale tile (included in this repo): right-click the shortcut → **Properties → Change icon** → pick the image above (or `%USERPROFILE%\.dsh\icons\whale-girl.ico` if you have the whale-girl pack).
+
+### 🤖 Or let an AI assistant install it
 
 Paste the block below to your AI assistant (a DSH agent session, Claude, etc.). It is self-contained — the assistant can fetch this repo and install everything correctly.
 
@@ -38,46 +91,6 @@ https://github.com/Polar-Zhang/dsh-launchpad (Windows).
    page. Then open `http://127.0.0.1:3080/` to confirm the app works.
 ````
 
-## What you get
-
-| Piece | What it does |
-|---|---|
-| `GET /launchpad` | The splash page: official DeepSeek whale logo (auto dark/light via `prefers-color-scheme`), 4-stage progress bar (cleanup → boot → ready → enter), waiting timer. |
-| `GET /launchpad/status` | JSON readiness probe the splash page polls; redirects into the app the moment the server is up. |
-| `scripts/start-dsh.cmd` | Silent Windows launcher: kills port-3080 zombies, starts `dsh web` hidden, opens the splash page in the browser. |
-| `scripts/watch-dsh-idle.cmd` | Hidden watcher: when the browser disconnects from port 3080 for ~10 s, it kills dsh. Close the tab → dsh stops. |
-| `scripts/hide-run.vbs` | 3-line helper that runs a command with zero visible windows (Windows has no pure-cmd way to fully hide a background process). |
-| `scripts/stop-dsh.cmd` | Emergency stop: kills whatever is listening on port 3080. |
-
-## Install
-
-As a plugin (requires DSH CLI):
-
-```bash
-dsh plugin --profile web add dsh-launchpad
-```
-
-Then deploy the launcher scripts and splash page to `~/.dsh`:
-
-```cmd
-:: from the package directory
-scripts\install.cmd
-```
-
-Or copy `assets/loading.html` + `scripts/*` manually to `%USERPROFILE%\.dsh\`.
-
-Create a desktop shortcut for a true double-click experience:
-
-```cmd
-wscript.exe "%USERPROFILE%\.dsh\hide-run.vbs" "cmd /c %USERPROFILE%\.dsh\start-dsh.cmd"
-```
-
-Set the shortcut icon to the official whale tile (included in this repo):
-
-![desktop icon](docs/desktop-icon.png)
-
-Right-click the shortcut → **Properties → Change icon** → pick the image above (or `%USERPROFILE%\.dsh\icons\whale-girl.ico` if you have the whale-girl pack).
-
 ## Usage
 
 1. **Start**: double-click the shortcut (or run `start-dsh.cmd`). No windows appear — the browser opens the splash page instantly, the 4-stage bar fills, and you land in the DSH UI when it's ready.
@@ -91,16 +104,6 @@ start "" "%USERPROFILE%\.dsh\loading.html?p"
 ```
 
 `?p` = preview mode (no polling, no redirect). Toggle Windows light/dark mode to see the theme switch.
-
-## Screenshots
-
-The splash page, dark & light (follows the system theme automatically):
-
-| Dark | Light |
-|---|---|
-| ![splash dark](docs/loading-dark.png) | ![splash light](docs/loading-light.png) |
-
-The four bar segments map to the real startup stages: cleanup → boot → ready → enter. When the server is up, the page redirects into the DSH UI.
 
 ## Endpoints
 

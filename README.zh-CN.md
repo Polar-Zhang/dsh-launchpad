@@ -4,7 +4,60 @@
 
 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) 插件：为 Web UI 增加**优雅的启动加载页**和**就绪状态接口**，并附赠 **Windows 桌面启动脚本**——双击启动 DSH，关闭浏览器标签 DSH 自动退出。
 
-## 🤖 复制给 AI 的一键安装指令
+## ✨ 跟随系统主题的启动页
+
+启动页自动匹配系统主题——**深色 / 浅色**，配官方 DeepSeek 鲸鱼：
+
+| 🌙 深色 | ☀️ 浅色 |
+|---|---|
+| ![加载页深色](docs/loading-dark.png) | ![加载页浅色](docs/loading-light.png) |
+
+- **官方 DeepSeek 鲸鱼 logo**——`prefers-color-scheme` 自动明暗切换，等待时轻轻浮动
+- **四段进度条**对应真实启动阶段：清理 → 启动 → 就绪 → 进入
+- **零窗口秒开**——双击快捷方式，浏览器瞬间出现加载页，服务就绪自动跳转进入 DSH
+- **图标随心换**——桌面快捷方式可挂上仓库附带的官方鲸鱼圆角图标，或任意你喜欢的图标：
+
+![桌面图标](docs/desktop-icon.png)
+
+## 包含什么
+
+| 组件 | 作用 |
+|---|---|
+| `GET /launchpad` | 启动加载页：官方 DeepSeek 鲸鱼 logo（`prefers-color-scheme` 自动明暗切换）、四段进度条（清理 → 启动 → 就绪 → 进入）、等待计时。 |
+| `GET /launchpad/status` | JSON 就绪探测接口，加载页轮询它；服务一就绪立即跳转进入。 |
+| `scripts/start-dsh.cmd` | 静默启动器：清理 3080 端口残留 → 隐藏启动 `dsh web` → 浏览器打开加载页。 |
+| `scripts/watch-dsh-idle.cmd` | 隐藏监控：浏览器断开 3080 约 10 秒后自动杀 dsh。关标签 = 停服务。 |
+| `scripts/hide-run.vbs` | 3 行隐藏运行工具（Windows 没有纯 cmd 的完全隐藏后台进程方案）。 |
+| `scripts/stop-dsh.cmd` | 应急停止：杀掉占用 3080 端口的进程。 |
+
+## 安装
+
+### 快速安装——插件本体
+
+```bash
+dsh plugin --profile web add dsh-launchpad
+```
+
+### 部署启动脚本 + 桌面快捷方式
+
+把启动脚本和加载页部署到 `~/.dsh`：
+
+```cmd
+:: 在包目录里执行
+scripts\install.cmd
+```
+
+或者手动把 `assets/loading.html` 和 `scripts/*` 复制到 `%USERPROFILE%\.dsh\`。
+
+创建桌面快捷方式，体验双击即开：
+
+```cmd
+wscript.exe "%USERPROFILE%\.dsh\hide-run.vbs" "cmd /c %USERPROFILE%\.dsh\start-dsh.cmd"
+```
+
+把快捷方式图标换成官方鲸鱼圆角图标（本仓库已附带）：右键快捷方式 → **属性 → 更改图标** → 选择上图（或装有鲸鱼娘皮肤时的 `%USERPROFILE%\.dsh\icons\whale-girl.ico`）。
+
+### 🤖 或者让 AI 帮你安装
 
 把下面的代码块整段复制给你的 AI 助手（DSH agent 会话、Claude 等均可）。指令自包含——AI 可以先拉取本仓库再按步骤正确安装。
 
@@ -37,46 +90,6 @@ https://github.com/Polar-Zhang/dsh-launchpad
    最后打开 `http://127.0.0.1:3080/` 确认应用正常。
 ````
 
-## 包含什么
-
-| 组件 | 作用 |
-|---|---|
-| `GET /launchpad` | 启动加载页：官方 DeepSeek 鲸鱼 logo（`prefers-color-scheme` 自动明暗切换）、四段进度条（清理 → 启动 → 就绪 → 进入）、等待计时。 |
-| `GET /launchpad/status` | JSON 就绪探测接口，加载页轮询它；服务一就绪立即跳转进入。 |
-| `scripts/start-dsh.cmd` | 静默启动器：清理 3080 端口残留 → 隐藏启动 `dsh web` → 浏览器打开加载页。 |
-| `scripts/watch-dsh-idle.cmd` | 隐藏监控：浏览器断开 3080 约 10 秒后自动杀 dsh。关标签 = 停服务。 |
-| `scripts/hide-run.vbs` | 3 行隐藏运行工具（Windows 没有纯 cmd 的完全隐藏后台进程方案）。 |
-| `scripts/stop-dsh.cmd` | 应急停止：杀掉占用 3080 端口的进程。 |
-
-## 安装
-
-作为插件安装（需要 DSH CLI）：
-
-```bash
-dsh plugin --profile web add dsh-launchpad
-```
-
-然后把启动脚本和加载页部署到 `~/.dsh`：
-
-```cmd
-:: 在包目录里执行
-scripts\install.cmd
-```
-
-或者手动把 `assets/loading.html` 和 `scripts/*` 复制到 `%USERPROFILE%\.dsh\`。
-
-创建桌面快捷方式，体验双击即开：
-
-```cmd
-wscript.exe "%USERPROFILE%\.dsh\hide-run.vbs" "cmd /c %USERPROFILE%\.dsh\start-dsh.cmd"
-```
-
-把快捷方式图标换成官方鲸鱼圆角图标（本仓库已附带）：
-
-![桌面图标](docs/desktop-icon.png)
-
-右键快捷方式 → **属性 → 更改图标** → 选择上图（或装有鲸鱼娘皮肤时的 `%USERPROFILE%\.dsh\icons\whale-girl.ico`）。
-
 ## 使用
 
 1. **启动**：双击快捷方式（或运行 `start-dsh.cmd`）。全程无窗口——浏览器瞬间打开加载页，四段进度条走完，就绪后自动进入 DSH 界面。
@@ -97,16 +110,6 @@ start "" "%USERPROFILE%\.dsh\loading.html?p"
 GET /launchpad           → 加载页 (text/html)
 GET /launchpad/status    → {"ok":true,"service":"dsh","pid":...,"uptime":...,"time":...}
 ```
-
-## 截图
-
-加载页效果（深色 / 浅色，自动跟随系统主题）：
-
-| 深色 | 浅色 |
-|---|---|
-| ![加载页深色](docs/loading-dark.png) | ![加载页浅色](docs/loading-light.png) |
-
-四段进度条对应真实启动阶段：清理 → 启动 → 就绪 → 进入；服务就绪后自动跳转进入 DSH 界面。
 
 ## 自定义
 
