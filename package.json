@@ -2,11 +2,24 @@
   "name": "dsh-launchpad",
   "version": "1.1.0",
   "description": "A DeepSeek Harness plugin that hosts an elegant splash/loading page and a readiness endpoint, plus Windows desktop launcher scripts (double-click to start, close the browser to stop).",
+  "author": "Polar-Zhang",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Polar-Zhang/dsh-launchpad.git"
+  },
+  "homepage": "https://github.com/Polar-Zhang/dsh-launchpad",
   "type": "module",
   "main": "lib/index.js",
+  "exports": {
+    ".": "./lib/index.js",
+    "./cordis.patch.yml": "./cordis.patch.yml",
+    "./package.json": "./package.json"
+  },
   "files": [
     "lib",
     "assets",
+    "docs",
     "scripts",
     "cordis.patch.yml",
     "README.md",
