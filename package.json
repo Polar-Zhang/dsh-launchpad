@@ -4,6 +4,9 @@
   "description": "A DeepSeek Harness plugin that hosts an elegant splash/loading page and a readiness endpoint, plus Windows desktop launcher scripts (double-click to start, close the browser to stop).",
   "author": "Polar-Zhang",
   "license": "MIT",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Polar-Zhang/dsh-launchpad.git"
