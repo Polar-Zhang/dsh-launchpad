@@ -1,4 +1,8 @@
 # dsh-launchpad bundle patch — mounts the launchpad server plugin.
+# inject: webServer is required since DSH rc.8 — ctx services are only
+# available when the loader entry declares them (cordis "without inject").
 - insert:
     - id: dsh-launchpad
       name: 'dsh-launchpad'
+      inject:
+        - webServer

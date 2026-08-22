@@ -1,6 +1,6 @@
 {
   "name": "dsh-launchpad",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "A DeepSeek Harness plugin that hosts an elegant splash/loading page and a readiness endpoint, plus Windows desktop launcher scripts (double-click to start, close the browser to stop).",
   "type": "module",
   "main": "lib/index.js",
@@ -16,6 +16,15 @@
   "dsh": {
     "bundle": {
       "patch": "./cordis.patch.yml"
+    }
+  },
+  "peerDependencies": {
+    "@deepseek-ai/cordis": "^4.0.1",
+    "@deepseek-ai/dsh-host-webserver": "^0.1.0-rc.8"
+  },
+  "peerDependenciesMeta": {
+    "@deepseek-ai/cordis": {
+      "optional": true
     }
   },
   "engines": {
